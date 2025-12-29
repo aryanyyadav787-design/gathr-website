@@ -371,7 +371,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="text-center md:text-left">
             <h2 className="font-display text-3xl text-brand mb-2 tracking-tighter">GATHR</h2>
-            <p className="text-gray-400 text-sm">© 2024 Gathr Social Inc.</p>
+            <p className="text-gray-400 text-sm">© 2026 Gathr Social Inc.</p>
           </div>
           <div className="flex gap-6">
             <a href="https://www.instagram.com/joingathrapp.in?igsh=eW82bXM4OGw0cTdv" target="_blank" rel="noopener noreferrer" className="font-bold hover:text-brand transition-colors">INSTAGRAM</a>
