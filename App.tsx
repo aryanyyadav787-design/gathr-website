@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Button } from './components/Button';
 import { BackgroundMusic } from './components/BackgroundMusic';
+import { SplashScreen } from './components/SplashScreen';
 import { ArrowRight, Music, Clock, Sparkles, Check, Mail, Zap, Users, Star } from 'lucide-react';
 
 // --- Custom Animation Component ---
@@ -165,6 +166,8 @@ export default function App() {
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSplash, setShowSplash] = useState(true);
+  const [startMusic, setStartMusic] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -201,190 +204,203 @@ export default function App() {
     }
   };
 
+  const handleSplashEnter = (choice: 'yes' | 'no') => {
+    setShowSplash(false);
+    setStartMusic(true);
+    // Could track the choice for analytics if needed
+    console.log('User selected:', choice);
+  };
+
   const scrollToWaitlist = () => {
     document.getElementById('waitlist')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
     <>
-      {/* Background Music - Johnny B. Goode by Chuck Berry */}
-      <BackgroundMusic youtubeVideoId="s6kqFXDL8RQ" autoPlay={true} />
+      {/* Splash Screen */}
+      {showSplash && <SplashScreen onEnter={handleSplashEnter} />}
 
-      <div className="min-h-screen bg-[#FDFDFD] text-black overflow-x-hidden">
+      {/* Background Music - Only starts after user interaction with splash */}
+      {startMusic && <BackgroundMusic youtubeVideoId="s6kqFXDL8RQ" />}
 
-        {/* Navbar */}
-        <nav className="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b-2 border-black h-24 md:h-20 flex items-center">
-          <div className="max-w-7xl mx-auto px-4 w-full flex items-center justify-between h-full">
-            {/* Logo Container - Uses absolute positioning on child to prevent layout issues with scaling */}
-            <div className="relative h-full w-32 md:w-40 flex items-center">
-              <div className="absolute left-0 top-1/2 -translate-y-1/2 origin-left transform scale-[0.35] md:scale-[0.4]">
-                <GathrLogo />
-              </div>
-            </div>
+      {/* Main content - Only show after splash screen is dismissed */}
+      {!showSplash && (
+        <div className="min-h-screen bg-[#FDFDFD] text-black overflow-x-hidden">
 
-            <Button onClick={scrollToWaitlist} size="md" className="hidden md:flex font-milker text-lg tracking-widest">Join Early Access</Button>
-          </div>
-        </nav>
-
-        {/* Hero Section */}
-        <section className="pt-32 pb-20 px-4 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <Reveal className="flex flex-col gap-6 z-10">
-            <div className="inline-flex self-start items-center gap-2 px-3 py-1 bg-yellow-300 border-2 border-black font-bold text-xs uppercase shadow-neo-sm transform -rotate-1">
-              <Zap size={14} className="fill-black" />
-              <span>AI-Powered Socializing</span>
-            </div>
-
-            <h1 className="font-display text-5xl md:text-7xl uppercase leading-[0.9]">
-              Don't Just Scroll. <br />
-              <span className="bg-brand px-2">GATHR.</span>
-            </h1>
-
-            <p className="text-xl md:text-2xl font-medium text-gray-700 max-w-lg leading-relaxed">
-              The social app that connects you based on your <span className="font-bold underline decoration-brand decoration-4">music taste</span> and <span className="font-bold underline decoration-brand decoration-4">real-time interests</span>.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4 mt-4">
-              <Button onClick={scrollToWaitlist} size="lg" className="font-milker text-xl tracking-widest px-10 hover:bg-black hover:text-white transition-colors duration-200">
-                JOIN WAITLIST <ArrowRight size={20} />
-              </Button>
-              <div className="flex items-center gap-2 px-4">
-                <div className="flex -space-x-2">
-                  {[1, 2, 3, 4].map(i => (
-                    <img key={i} src={`https://picsum.photos/seed/${i}/40/40`} className="w-8 h-8 rounded-full border-2 border-white bg-gray-200" alt="user" />
-                  ))}
-                </div>
-                <span className="text-sm font-bold">200+ waitlist</span>
-              </div>
-            </div>
-          </Reveal>
-
-          <Reveal delay={200} className="relative flex justify-center lg:justify-end">
-            <div className="absolute top-10 right-10 w-64 h-64 bg-brand rounded-full blur-3xl opacity-30 animate-pulse"></div>
-            <PhonePreview />
-
-            {/* Floating badges */}
-            <div className="absolute top-1/4 -left-4 md:left-10 bg-white border-2 border-black p-3 shadow-neo rotate-[-6deg] animate-float hidden sm:block">
-              <div className="flex items-center gap-2">
-                <Clock className="text-blue-500" size={20} />
-                <div>
-                  <p className="font-bold text-xs uppercase">Hackathon in 2h</p>
-                  <p className="text-[10px] text-gray-500">Looking for a designer</p>
+          {/* Navbar */}
+          <nav className="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b-2 border-black h-24 md:h-20 flex items-center">
+            <div className="max-w-7xl mx-auto px-4 w-full flex items-center justify-between h-full">
+              {/* Logo Container - Uses absolute positioning on child to prevent layout issues with scaling */}
+              <div className="relative h-full w-32 md:w-40 flex items-center">
+                <div className="absolute left-0 top-1/2 -translate-y-1/2 origin-left transform scale-[0.35] md:scale-[0.4]">
+                  <GathrLogo />
                 </div>
               </div>
-            </div>
 
-            <div className="absolute bottom-1/4 -right-4 bg-white border-2 border-black p-3 shadow-neo rotate-[3deg] hidden sm:block animate-float-delayed">
-              <div className="flex items-center gap-2">
-                <Music className="text-purple-500" size={20} />
-                <div>
-                  <p className="font-bold text-xs uppercase">Vibe Match</p>
-                  <p className="text-[10px] text-gray-500">Both love The Weeknd</p>
-                </div>
+              <Button onClick={scrollToWaitlist} size="md" className="hidden md:flex font-milker text-lg tracking-widest">Join Early Access</Button>
+            </div>
+          </nav>
+
+          {/* Hero Section */}
+          <section className="pt-32 pb-20 px-4 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <Reveal className="flex flex-col gap-6 z-10">
+              <div className="inline-flex self-start items-center gap-2 px-3 py-1 bg-yellow-300 border-2 border-black font-bold text-xs uppercase shadow-neo-sm transform -rotate-1">
+                <Zap size={14} className="fill-black" />
+                <span>AI-Powered Socializing</span>
               </div>
-            </div>
-          </Reveal>
-        </section>
 
-        <Marquee />
+              <h1 className="font-display text-5xl md:text-7xl uppercase leading-[0.9]">
+                Don't Just Scroll. <br />
+                <span className="bg-brand px-2">GATHR.</span>
+              </h1>
 
-        {/* Features Grid */}
-        <section className="py-24 px-4 bg-gray-50 border-b-2 border-black">
-          <div className="max-w-7xl mx-auto">
-            <Reveal className="text-center mb-16">
-              <h2 className="font-display text-4xl md:text-5xl uppercase mb-4">Why GATHR?</h2>
-              <p className="text-xl font-medium text-gray-600">Stop swiping on faces. Start matching on vibes.</p>
-            </Reveal>
+              <p className="text-xl md:text-2xl font-medium text-gray-700 max-w-lg leading-relaxed">
+                The social app that connects you based on your <span className="font-bold underline decoration-brand decoration-4">music taste</span> and <span className="font-bold underline decoration-brand decoration-4">real-time interests</span>.
+              </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <Reveal delay={100} className="h-full">
-                <FeatureCard
-                  icon={Music}
-                  color="bg-purple-300"
-                  title="Music Compatibility"
-                  description="Our AI analyzes your listening history to find people who actually understand why that one song makes you cry. No more passing the aux with anxiety."
-                />
-              </Reveal>
-              <Reveal delay={300} className="h-full">
-                <FeatureCard
-                  icon={Clock}
-                  color="bg-red-300"
-                  title="Time-Limited Activities"
-                  description="Need a 4th player for COD right now? Or a study buddy for the next 2 hours? Post a time-limited activity and get grouped instantly."
-                />
-              </Reveal>
-              <Reveal delay={500} className="h-full">
-                <FeatureCard
-                  icon={Sparkles}
-                  color="bg-brand"
-                  title="Interest Matching"
-                  description="We go beyond 'I like travel'. Our AI finds granular interest overlaps so you can skip the small talk and dive straight into the good stuff."
-                />
-              </Reveal>
-            </div>
-          </div>
-        </section>
-
-        {/* Waitlist Section */}
-        <section id="waitlist" className="py-24 px-4 bg-[#C0FF01] relative overflow-hidden">
-          {/* Background Patterns */}
-          <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, #000 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
-
-          <div className="max-w-3xl mx-auto text-center relative z-10">
-            <Reveal threshold={0.2} className="w-full">
-              <div className="bg-white border-4 border-black p-8 md:p-12 shadow-neo-xl transform md:rotate-1 transition-transform hover:rotate-0">
-                {!submitted ? (
-                  <>
-                    <h2 className="font-display text-4xl md:text-5xl uppercase mb-6 leading-none">Get In Before <br />It Goes Viral.</h2>
-                    <p className="text-lg font-medium text-gray-600 mb-8">
-                      We're launching soon to a limited group of users. Secure your spot and find your tribe early.
-                    </p>
-
-                    <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-4">
-                      <div className="flex-1 relative">
-                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
-                        <input
-                          type="email"
-                          required
-                          placeholder="your@email.com"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          className="w-full pl-12 pr-4 py-4 border-2 border-black font-bold bg-gray-50 focus:outline-none focus:ring-4 focus:ring-brand/50 transition-all placeholder:text-gray-400"
-                        />
-                      </div>
-                      <Button type="submit" size="lg" disabled={isSubmitting} className="font-milker text-xl tracking-widest bg-brand text-black hover:bg-black hover:text-white transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
-                        {isSubmitting ? 'JOINING...' : 'JOIN WAITLIST'}
-                      </Button>
-                    </form>
-                    <p className="mt-4 text-xs font-bold text-gray-400 uppercase tracking-widest">No Spam. Only Vibes.</p>
-                  </>
-                ) : (
-                  <div className="py-12 flex flex-col items-center">
-                    <div className="w-20 h-20 bg-brand border-2 border-black rounded-full flex items-center justify-center mb-6 shadow-neo animate-bounce">
-                      <Check size={40} className="text-black" />
-                    </div>
-                    <h3 className="font-display text-3xl uppercase mb-2">You're on the list!</h3>
-                    <p className="font-medium text-gray-600">Keep an eye on your inbox. We'll be in touch.</p>
+              <div className="flex flex-col sm:flex-row gap-4 mt-4">
+                <Button onClick={scrollToWaitlist} size="lg" className="font-milker text-xl tracking-widest px-10 hover:bg-black hover:text-white transition-colors duration-200">
+                  JOIN WAITLIST <ArrowRight size={20} />
+                </Button>
+                <div className="flex items-center gap-2 px-4">
+                  <div className="flex -space-x-2">
+                    {[1, 2, 3, 4].map(i => (
+                      <img key={i} src={`https://picsum.photos/seed/${i}/40/40`} className="w-8 h-8 rounded-full border-2 border-white bg-gray-200" alt="user" />
+                    ))}
                   </div>
-                )}
+                  <span className="text-sm font-bold">200+ waitlist</span>
+                </div>
               </div>
             </Reveal>
-          </div>
-        </section>
 
-        {/* Footer */}
-        <footer className="bg-black text-white py-12 px-4 border-t-2 border-brand">
-          <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
-            <div className="text-center md:text-left">
-              <h2 className="font-display text-3xl text-brand mb-2 tracking-tighter">GATHR</h2>
-              <p className="text-gray-400 text-sm">© 2026 Gathr Social Inc.</p>
-            </div>
-            <div className="flex gap-6">
-              <a href="https://www.instagram.com/joingathrapp.in?igsh=eW82bXM4OGw0cTdv" target="_blank" rel="noopener noreferrer" className="font-bold hover:text-brand transition-colors">INSTAGRAM</a>
-            </div>
-          </div>
-        </footer>
+            <Reveal delay={200} className="relative flex justify-center lg:justify-end">
+              <div className="absolute top-10 right-10 w-64 h-64 bg-brand rounded-full blur-3xl opacity-30 animate-pulse"></div>
+              <PhonePreview />
 
-      </div>
+              {/* Floating badges */}
+              <div className="absolute top-1/4 -left-4 md:left-10 bg-white border-2 border-black p-3 shadow-neo rotate-[-6deg] animate-float hidden sm:block">
+                <div className="flex items-center gap-2">
+                  <Clock className="text-blue-500" size={20} />
+                  <div>
+                    <p className="font-bold text-xs uppercase">Hackathon in 2h</p>
+                    <p className="text-[10px] text-gray-500">Looking for a designer</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="absolute bottom-1/4 -right-4 bg-white border-2 border-black p-3 shadow-neo rotate-[3deg] hidden sm:block animate-float-delayed">
+                <div className="flex items-center gap-2">
+                  <Music className="text-purple-500" size={20} />
+                  <div>
+                    <p className="font-bold text-xs uppercase">Vibe Match</p>
+                    <p className="text-[10px] text-gray-500">Both love The Weeknd</p>
+                  </div>
+                </div>
+              </div>
+            </Reveal>
+          </section>
+
+          <Marquee />
+
+          {/* Features Grid */}
+          <section className="py-24 px-4 bg-gray-50 border-b-2 border-black">
+            <div className="max-w-7xl mx-auto">
+              <Reveal className="text-center mb-16">
+                <h2 className="font-display text-4xl md:text-5xl uppercase mb-4">Why GATHR?</h2>
+                <p className="text-xl font-medium text-gray-600">Stop swiping on faces. Start matching on vibes.</p>
+              </Reveal>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <Reveal delay={100} className="h-full">
+                  <FeatureCard
+                    icon={Music}
+                    color="bg-purple-300"
+                    title="Music Compatibility"
+                    description="Our AI analyzes your listening history to find people who actually understand why that one song makes you cry. No more passing the aux with anxiety."
+                  />
+                </Reveal>
+                <Reveal delay={300} className="h-full">
+                  <FeatureCard
+                    icon={Clock}
+                    color="bg-red-300"
+                    title="Time-Limited Activities"
+                    description="Need a 4th player for COD right now? Or a study buddy for the next 2 hours? Post a time-limited activity and get grouped instantly."
+                  />
+                </Reveal>
+                <Reveal delay={500} className="h-full">
+                  <FeatureCard
+                    icon={Sparkles}
+                    color="bg-brand"
+                    title="Interest Matching"
+                    description="We go beyond 'I like travel'. Our AI finds granular interest overlaps so you can skip the small talk and dive straight into the good stuff."
+                  />
+                </Reveal>
+              </div>
+            </div>
+          </section>
+
+          {/* Waitlist Section */}
+          <section id="waitlist" className="py-24 px-4 bg-[#C0FF01] relative overflow-hidden">
+            {/* Background Patterns */}
+            <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, #000 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
+
+            <div className="max-w-3xl mx-auto text-center relative z-10">
+              <Reveal threshold={0.2} className="w-full">
+                <div className="bg-white border-4 border-black p-8 md:p-12 shadow-neo-xl transform md:rotate-1 transition-transform hover:rotate-0">
+                  {!submitted ? (
+                    <>
+                      <h2 className="font-display text-4xl md:text-5xl uppercase mb-6 leading-none">Get In Before <br />It Goes Viral.</h2>
+                      <p className="text-lg font-medium text-gray-600 mb-8">
+                        We're launching soon to a limited group of users. Secure your spot and find your tribe early.
+                      </p>
+
+                      <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-4">
+                        <div className="flex-1 relative">
+                          <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                          <input
+                            type="email"
+                            required
+                            placeholder="your@email.com"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="w-full pl-12 pr-4 py-4 border-2 border-black font-bold bg-gray-50 focus:outline-none focus:ring-4 focus:ring-brand/50 transition-all placeholder:text-gray-400"
+                          />
+                        </div>
+                        <Button type="submit" size="lg" disabled={isSubmitting} className="font-milker text-xl tracking-widest bg-brand text-black hover:bg-black hover:text-white transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                          {isSubmitting ? 'JOINING...' : 'JOIN WAITLIST'}
+                        </Button>
+                      </form>
+                      <p className="mt-4 text-xs font-bold text-gray-400 uppercase tracking-widest">No Spam. Only Vibes.</p>
+                    </>
+                  ) : (
+                    <div className="py-12 flex flex-col items-center">
+                      <div className="w-20 h-20 bg-brand border-2 border-black rounded-full flex items-center justify-center mb-6 shadow-neo animate-bounce">
+                        <Check size={40} className="text-black" />
+                      </div>
+                      <h3 className="font-display text-3xl uppercase mb-2">You're on the list!</h3>
+                      <p className="font-medium text-gray-600">Keep an eye on your inbox. We'll be in touch.</p>
+                    </div>
+                  )}
+                </div>
+              </Reveal>
+            </div>
+          </section>
+
+          {/* Footer */}
+          <footer className="bg-black text-white py-12 px-4 border-t-2 border-brand">
+            <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+              <div className="text-center md:text-left">
+                <h2 className="font-display text-3xl text-brand mb-2 tracking-tighter">GATHR</h2>
+                <p className="text-gray-400 text-sm">© 2026 Gathr Social Inc.</p>
+              </div>
+              <div className="flex gap-6">
+                <a href="https://www.instagram.com/joingathrapp.in?igsh=eW82bXM4OGw0cTdv" target="_blank" rel="noopener noreferrer" className="font-bold hover:text-brand transition-colors">INSTAGRAM</a>
+              </div>
+            </div>
+          </footer>
+
+        </div>
+      )}
     </>
   );
 }
