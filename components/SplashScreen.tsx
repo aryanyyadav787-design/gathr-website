@@ -22,7 +22,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onEnter }) => {
                 </h1>
 
                 {/* Buttons */}
-                <div className="flex flex-col sm:flex-row gap-6 justify-center items-center animate-slide-up-delayed">
+                <div className="relative z-10 flex flex-col sm:flex-row gap-6 justify-center items-center animate-slide-up-delayed">
                     <button
                         onClick={() => onEnter('yes')}
                         className="group relative px-10 py-5 bg-brand text-black font-display text-xl md:text-2xl uppercase border-2 border-white shadow-[4px_4px_0px_0px_rgba(192,255,1,0.5)] hover:shadow-[6px_6px_0px_0px_rgba(192,255,1,0.7)] hover:-translate-y-1 active:translate-y-0.5 active:shadow-[2px_2px_0px_0px_rgba(192,255,1,0.5)] transition-all duration-200 min-w-[200px] touch-manipulation"
