@@ -25,7 +25,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onEnter }) => {
                 <div className="flex flex-col sm:flex-row gap-6 justify-center items-center animate-slide-up-delayed">
                     <button
                         onClick={() => onEnter('yes')}
-                        className="group relative px-10 py-5 bg-brand text-black font-display text-xl md:text-2xl uppercase border-2 border-white shadow-[4px_4px_0px_0px_rgba(192,255,1,0.5)] hover:shadow-[6px_6px_0px_0px_rgba(192,255,1,0.7)] hover:-translate-y-1 transition-all duration-200 min-w-[200px]"
+                        className="group relative px-10 py-5 bg-brand text-black font-display text-xl md:text-2xl uppercase border-2 border-white shadow-[4px_4px_0px_0px_rgba(192,255,1,0.5)] hover:shadow-[6px_6px_0px_0px_rgba(192,255,1,0.7)] hover:-translate-y-1 active:translate-y-0.5 active:shadow-[2px_2px_0px_0px_rgba(192,255,1,0.5)] transition-all duration-200 min-w-[200px] touch-manipulation"
                     >
                         <span className="relative z-10">Yes, that's me</span>
                         <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity"></div>
@@ -33,7 +33,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onEnter }) => {
 
                     <button
                         onClick={() => onEnter('no')}
-                        className="group relative px-10 py-5 bg-transparent text-white font-display text-xl md:text-2xl uppercase border-2 border-white shadow-[4px_4px_0px_0px_rgba(255,255,255,0.3)] hover:shadow-[6px_6px_0px_0px_rgba(255,255,255,0.5)] hover:-translate-y-1 transition-all duration-200 min-w-[200px]"
+                        className="group relative px-10 py-5 bg-transparent text-white font-display text-xl md:text-2xl uppercase border-2 border-white shadow-[4px_4px_0px_0px_rgba(255,255,255,0.3)] hover:shadow-[6px_6px_0px_0px_rgba(255,255,255,0.5)] hover:-translate-y-1 active:translate-y-0.5 active:shadow-[2px_2px_0px_0px_rgba(255,255,255,0.3)] transition-all duration-200 min-w-[200px] touch-manipulation"
                     >
                         <span className="relative z-10">Not really</span>
                         <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity"></div>

@@ -205,8 +205,14 @@ export default function App() {
   };
 
   const handleSplashEnter = (choice: 'yes' | 'no') => {
+    // Dismiss splash immediately for smooth UX
     setShowSplash(false);
-    setStartMusic(true);
+
+    // Add slight delay before starting music to ensure smooth transition on mobile
+    setTimeout(() => {
+      setStartMusic(true);
+    }, 100);
+
     // Could track the choice for analytics if needed
     console.log('User selected:', choice);
   };
