@@ -171,6 +171,14 @@ export default function App() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Validate email format with proper domain extension
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    if (!emailRegex.test(email)) {
+      alert('Please enter a valid email address with a proper domain extension (e.g., .com, .net, .org)');
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -366,6 +374,8 @@ export default function App() {
                           <input
                             type="email"
                             required
+                            pattern="[^\s@]+@[^\s@]+\.[^\s@]{2,}"
+                            title="Please enter a valid email with a proper domain extension (e.g., .com, .net, .org)"
                             placeholder="your@email.com"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
